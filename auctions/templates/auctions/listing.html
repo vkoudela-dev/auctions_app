@@ -1,0 +1,99 @@
+{% extends "auctions/layout.html" %}
+
+<!-- Block start -->
+{% block body %}
+<div class="sub-body">
+  <h2>{{ listing.title }}</h2>
+
+  {% if user.is_authenticated %}
+  <form action="{% url 'watchlist' %}" method="post">
+    {% csrf_token %}
+    <input
+      class="watchlist_btn"
+      type="submit"
+      value="Watchlist"
+      name="watchlist_btn"
+    />
+    <input type="hidden" value="{{ listing.id }}" name="listing_id" />
+  </form>
+  {% endif %}
+  <img src="{{ listing.url }}" alt="Product photo" />
+  <p>{{ listing.description | linebreaks }}</p>
+  <h5>${{ price }}</h5>
+
+  {% if user.is_authenticated %} {% if winner %}
+  <h3 class="msg">{{ msg }}</h3>
+  {% endif %}
+
+  <!-- If victory in auction -->
+  {% if not victory %} {% if msg %}
+  <h3 class="msg">{{ msg }}</h3>
+  {% endif %}
+  <p class="bidamount">
+    {{ bids_count }} bid(s) so far. Your bid is the current bid.
+  </p>
+  <form action="{% url 'bidding' %}" method="post">
+    {% csrf_token %}
+    <input
+      class="bidform"
+      type="text"
+      name="bid_value"
+      autocomplete="off"
+      placeholder="Your bid"
+    /><br />
+    <input class="button" type="submit" name="submit" value="Place Bid" />
+    <input type="hidden" name="listing_id" value="{{ listing.id }}" />
+  </form>
+
+  {% if creator %}
+  <form action="{% url 'endauction' %}" method="post">
+    {% csrf_token %}
+    <input
+      class="button"
+      type="submit"
+      name="close_auction"
+      value="Close auction"
+    />
+    <input type="hidden" name="listing_id" value="{{ listing.id }}" />
+  </form>
+  {% endif %}
+
+  <!-- End of victory -->
+  {% endif %}
+  <!-- End of authenticating -->
+  {% endif %}
+
+  <h4>Details</h4>
+  <ul>
+    <li>Listed by: {{ listing.user }}</li>
+    <li>Category: {{ listing.category }}</li>
+  </ul>
+
+  <h4>Comments</h4>
+  <!-- Comment details -->
+  {% for comment in comments %}
+  <!-- For comments -->
+  <div class="comment_div">
+    <p>
+      <span class="comment_user">{{ comment.user }}</span>
+      <span class="comment_timestamp">{{ comment.timestamp }}</span><br />
+      <span>{{ comment.text }}</span>
+    </p>
+  </div>
+  <!-- End comments -->
+  {% endfor %}
+
+  <!-- Add comment -->
+  {% if user.is_authenticated %}
+  <h6>Add your comment:</h6>
+  <form action="{% url 'addcomment' %}" method="post">
+    {% csrf_token %} {{ comment_form.as_p }}
+    <input class="button" type="submit" name="submit" value="Comment" />
+    <input type="hidden" name="listing_id" value="{{ listing.id }}" />
+  </form>
+  <!-- Endif -->
+  {% endif %}
+
+  <!-- Endblock -->
+  {% endblock %}
+</div>

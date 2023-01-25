@@ -1,0 +1,34 @@
+{% extends "auctions/layout.html" %}
+
+<!-- Start block -->
+{% block body %}
+<div class="sub-body">
+  <h2>Watchlist</h2>
+  {% for watchitem in watchlist %}
+  <div class="listing">
+    <div style="flex-grow: 1">
+      <a href="listing/{{ watchitem.id }}">
+        <img class="img-list" src="{{ watchitem.url }}" alt="Product photo" />
+      </a>
+    </div>
+    <div style="flex-grow: 2">
+      <a href="listing/{{ watchitem.id }}">
+        <h3>{{ watchitem.title }}</h3>
+      </a>
+      <p><strong>Price:</strong> ${{ watchitem.actual_price }}</p>
+      <p>{{ watchitem.description }}</p>
+      <p class="timestamp">Created {{ watchitem.timestamp }}</p>
+    </div>
+    <div class="remove_item" style="flex-grow: 1">
+      <form action="{% url 'remove' %}" method="post">
+        {% csrf_token %}
+        <input class="button" type="submit" value="Remove" />
+        <input type="hidden" value="{{ watchitem.id }}" name="watchitem_id" />
+      </form>
+    </div>
+  </div>
+
+  {% endfor %}
+  <!-- Endblock -->
+  {% endblock %}
+</div>

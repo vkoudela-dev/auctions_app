@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %} {% block body %}
+
+<div class="sub-body">
+  <h2>Select your favorite category</h2>
+  {% for category in categories %}
+
+  <div class="category">
+    <a href="category/{{ category.id }}">
+      <h3>{{ category.category }}</h3>
+    </a>
+  </div>
+  {% endfor %} {% endblock %}
+</div>

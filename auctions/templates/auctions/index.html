@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %} {% block body %}
+<div class="sub-body">
+  <h2>Active Listings</h2>
+  {% for listing in listings %}
+
+  <div class="listing">
+    <a style="flex-grow: 1" href="listing/{{ listing.id }}">
+      <img class="img-list" src="{{ listing.url }}" alt="Product photo" />
+    </a>
+    <div class="listing-text" style="flex-grow: 5">
+      <a href="listing/{{ listing.id }}">
+        <h3>{{ listing.title }}</h3>
+      </a>
+      <p><strong>Price:</strong> ${{ listing.actual_price }}</p>
+      <p class="list-description">{{ listing.description }}</p>
+      <p class="timestamp">Created {{ listing.timestamp }}</p>
+    </div>
+  </div>
+  {% endfor %} {% endblock %}
+</div>
